@@ -1,0 +1,29 @@
+import { IRootType } from '@/model/home.uts'
+import { ALL_MOVIE_INFO_KEY } from '@/common/store.uts'
+import { getAllMovieInfo } from '@/common/api.uts'
+
+export const rootState = ref<IRootType | null>(null);
+
+export const initUserStore = () => {
+	const movieInfo = uni.getStorageSync(ALL_MOVIE_INFO_KEY)
+	if (movieInfo != '') {
+		const rootData = JSON.parse<IRootType>(JSON.stringify(movieInfo))
+		updateRootState(rootData)
+	} else {
+		getAllMovieInfo().then((res : RequestSuccess<unknown>) => {
+			const rootData = res.data as IRootType;
+			uni.setStorageSync(ALL_MOVIE_INFO_KEY, rootData);
+			updateRootState(rootData);
+		}, (err : RequestFail) => {
+			console.log(err);
+		});
+	}
+}
+
+export function updateRootState(data : IRootType | null) {
+	rootState.value = data
+}
+
+export const useRootState = () => {
+	return rootState;
+}

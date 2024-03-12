@@ -2,52 +2,57 @@
 	<view class="content">
 		<swiper :indicator-dots="true" indicator-active-color="#007AFF" :autoplay="true">
 			<swiper-item item-id="A">
-				<view class="swiper-item uni-bg-red"><text class="swiper-item-Text">{{ carousel }}</text></view>
+				<view v-for="item in carousel" :key="item.title" class="swiper-item uni-bg-red"><text
+						class="swiper-item-Text">{{ item.title }}</text></view>
 			</swiper-item>
 		</swiper>
 		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
+		<view class="text-area" @click="handleClick">
+			更新
 		</view>
 	</view>
 </template>
 
-<script>
-	import { getStorage, ALL_MOVIE_INFO_KEY } from '../../common/store.uts';
-	type News = {
-		image : string;
-		introduce : string;
-		updateNumber : number;
-		store : string[];
-		title : string;
-	}
+<script lang="uts" setup>
+	import { IRootType, Home, News, Carousel } from '@/model/home.uts'
+	import { useRootState, rootState, updateRootState } from '@/store/root.uts';
+	const carousel = computed<Carousel[]>(() : Carousel[] => {
+	  return (rootState.value as IRootType).home.carousel;
+	})
+	console.log(rootState.value)
 
-	type Carousel = {
-		src : string;
-		introduce : string;
-		alt : string;
-		title : string;
-	}
+	console.log(carousel)
 
-	type Home = {
-		news : News[];
-		carousel : Carousel[];
-	}
-
-	type IRootType = {
-		home : Home;
-	}
-	export default {
-		data() {
-			return {
-				carousel: (getStorage(ALL_MOVIE_INFO_KEY) as IRootType).home.carousel
+	const handleClick = () => {
+		const data: IRootType = {
+				"home":
+					({
+						"carousel":
+							([
+								{
+									"alt": "图片2",
+									"introduce": "图片2的介绍",
+									"src": "",
+									"title": "图片3的标题"
+								}
+							] as Carousel[]),
+						"news":
+							([
+								{
+									"image": "movie-info/master/hclxjp.jpg",
+									"introduce": "憨厨历险记",
+									"store":
+										["hclxj"],
+									"title": "憨厨历险记",
+									"updateNumber": -1
+								}
+							] as News[])
+					} as Home)
 			}
-		},
-		onLoad() {
-			console.log(this.carousel)
-		},
-		methods: {
-
-		}
+		updateRootState(data);
+		
+		
+		console.log(rootState.value)
 	}
 </script>
 

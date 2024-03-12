@@ -1,0 +1,23 @@
+	export type News = {
+		image : string;
+		introduce : string;
+		updateNumber : number;
+		store : string[];
+		title : string;
+	}
+
+	export type Carousel = {
+		src : string;
+		introduce : string;
+		alt : string;
+		title : string;
+	}
+
+	export type Home = {
+		news : News[];
+		carousel : Carousel[];
+	}
+
+	export type IRootType = {
+		home : Home;
+	}
