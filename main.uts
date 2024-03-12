@@ -1,6 +1,15 @@
 import App from './App.uvue'
 
 import { createSSRApp } from 'vue'
+import { getAllMovieInfo, setStorage, getFilePath, ALL_MOVIE_INFO_KEY } from './common/index.uts';
+import { StoreOptions } from './common/types.d.uts';
+
+getAllMovieInfo().then((res : RequestSuccess<unknown>) => {
+	setStorage(ALL_MOVIE_INFO_KEY, res.data as any)
+}, (err : RequestFail) => {
+	console.log(err);
+});
+
 export function createApp() {
 	const app = createSSRApp(App)
 	return {

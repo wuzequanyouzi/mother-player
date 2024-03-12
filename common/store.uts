@@ -1,0 +1,9 @@
+export const ALL_MOVIE_INFO_KEY = "ALL_MOVIE_INFO_KEY";
+
+export const setStorage = (key :string, data : any) => {
+	uni.setStorageSync(key, (data as any));
+};
+
+export const getStorage = (key :string): any => {
+	return (uni.getStorageSync(key) as any);
+}

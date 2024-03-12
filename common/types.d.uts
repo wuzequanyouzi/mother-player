@@ -1,0 +1,6 @@
+export type StoreOptions = {
+	 repo: string,
+	 ref: string,
+	 fileNamePath: string,
+	 owner?: string 
+}

@@ -1,0 +1,38 @@
+import { StoreOptions } from './types.d.uts';
+import { setStorage, getStorage, ALL_MOVIE_INFO_KEY } from './store.uts';
+
+const __token__ : string = "fd88030442cf309f42b9a8771dad0b97";
+
+const __apiOrigin__ : string = "https://gitee.com/api/v5/repos";
+
+const __owner__ : string = "zhangyuyou";
+
+export function getFilePath({ repo, ref = "master", fileNamePath, owner = __owner__ } : StoreOptions) : string {
+	return `${__apiOrigin__}/${owner}/${repo}/raw/${fileNamePath}?access_token=${__token__}&ref=${ref}`;
+};
+
+export function fetch(options : RequestOptions<any>) : Promise<RequestSuccess<unknown>> {
+	return new Promise((resolve : (res : RequestSuccess<unknown>) => void, reject : (err : RequestFail) => void) => {
+		uni.request({
+			...options,
+			url: options.url,
+			success: (res) => {
+				res.data = JSON.parse(res.data as string);
+				resolve(res);
+			},
+			fail: (err) => {
+				reject(err);
+			}
+		})
+	})
+}
+
+export const getAllMovieInfo = () : Promise<RequestSuccess<unknown>> => {
+	return fetch({
+		url: getFilePath({
+			repo: 'movie-info',
+			ref: 'master',
+			fileNamePath: 'info.json'
+		} as StoreOptions)
+	} as RequestOptions<any>)
+}
